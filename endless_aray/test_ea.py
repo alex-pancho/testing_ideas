@@ -3,6 +3,7 @@ from endless_array import EndlessAray
 
 
 """
+Test cases:
 a.set(1, "a")
 a.get(1) # a
 a.get(1000) # None
