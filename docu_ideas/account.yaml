@@ -1,0 +1,20 @@
+elements:
+- author: Account Team
+  brief: Account management system
+  description: "* API Endpoints:\n *   - `/api/v1/accounts`\n *   - `/api/v1/profiles`\n\
+    \ * \n * Security:\n *   - Bearer Authentication\n *   - API Key"
+  version: 2.0.0
+- brief: Creates a new user account.
+  exceptions:
+  - description: "If an account with the same username or email already exists.\n\
+      \     *"
+    exception: DuplicateAccountError
+  - description: "If the input data is invalid.\n     * \n     *"
+    exception: ValidationError
+  parameters:
+  - description: "Contains information required to create a user account.\n     *"
+    name: accountData
+  returns:
+    description: "AccountResult Object containing details of the created account.\n\
+      \     * \n     *"
+file: accountManager.hpp
