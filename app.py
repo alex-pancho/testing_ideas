@@ -1,7 +1,11 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask import render_template
-from flask import jsonify
+from flask_sqlalchemy import SQLAlchemy
+from db_model import db
+from db_model import User
+
 app = Flask(__name__)
+
 
 @app.route('/')
 def home():
@@ -35,10 +39,13 @@ def get_data():
     }
     return jsonify(data)
 
-# @app.route('/api/add', methods=['POST'])
-# def add_data():
-#     data = request.get_json()
-#     return jsonify({"received": data}), 201
+@app.route('/api/add_user', methods=['POST'])
+def add_user():
+    data = request.json
+    new_user = User(username=data['username'], email=data['email'])
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({"message": f"User {new_user.username} added."}, 201)
 
 
 if __name__ == "__main__":

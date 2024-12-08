@@ -1,0 +1,8 @@
+Top 5 letters:
+t: 10
+s: 9
+e: 8
+o: 6
+f: 5
+
+Top 5 words:

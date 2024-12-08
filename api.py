@@ -9,8 +9,15 @@ data_store = {}
 class  DataResource(Resource):
     def get(self, item_id):
         item = data_store.get(item_id)
-        if not item:
+        if item_id == "1":
+            token = request.headers.get('Authorization')
+            if token == "Bearer mysecrettoken":
+                return {"data": "Secure data"}, 200
+            else:
+                return {"error": "Not Authorizated"}, 403
+        elif not item:
             return {"error": "Item not found"}, 404
+        
         return item, 200
 
     def post(self, item_id):
