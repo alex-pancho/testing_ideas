@@ -47,18 +47,18 @@ def get_top_letters_and_words(text, num):
     text = re.sub(r'[^a-zA-Z\s]', '', text).lower()
     letters = [ch for ch in text if ch != ' ']
     letters_cnt = Counter(letters)
-    top_letters = letters_cnt.most_common(num)
-    
+    top_chars = sorted(letters_cnt.items(), key=lambda x: (-x[1], x[0]))
+    top_letters = top_chars[:num]
     words = text.split()
     words_cnt = Counter(words)
     top_alptha = sorted(words_cnt.items(), key=lambda x: (-x[1], x[0]))
     top_words = top_alptha[:num]
-    print(top_alptha)
+    #print(top_alptha)
     letters_out = f"Top {num} letters:\n"
     letters_str = "\n".join([f"{letter}: {freq}" for letter, freq in top_letters])
     words_out = f"Top {num} words:\n"
     words_str = "\n".join([f"{word}: {freq}" for word, freq in top_words])
-    return letters_out+letters_str+"\n", words_out+words_str
+    return letters_out+letters_str, words_out+words_str
 
 if __name__ == "__main__":
     # fptr = open("tt.txt", 'w')
@@ -66,8 +66,9 @@ if __name__ == "__main__":
     num = int(input("c:"))
     letters,words = get_top_letters_and_words(text,num)
     print(letters)
+    print("\n")
+    print(words)
     # fptr.write(letters)
     # fptr.write("\n")
-    print(words)
     # fptr.write(words)
     # fptr.close()
