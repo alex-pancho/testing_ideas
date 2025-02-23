@@ -1,17 +1,3 @@
-"""
-use zip and list index
-"""
-names = ["vadim", "Is", "alex", "ua"]
-
-z = zip([names[0], names[2]], [names[1], names[3]])
-for k,v in z:
-    print(k,v)
-
-a = 3
-b = "3"
-c = int(str(a)+b)
-print(a*b)
-
 # from functools import cache
 # @cache
 def fib_recursive(n):
