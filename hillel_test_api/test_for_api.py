@@ -1,15 +1,28 @@
-from hillel_api import *
+from hillel_api import API
+import requests
 import pytest
 
 
-def test_sigin_positive():
+api = API()
+s = requests.Session()
 
+
+def after_processsing(r: requests.Response):
+    try:
+        return r.json()
+    except requests.JSONDecodeError as e:
+        print(e)
+        return {"nonjson": r.text}
+
+
+def test_sigin_positive(get_regisered_user):
+    email, password = get_regisered_user
     user_data = {
-    "email": "qam2608@2022test.com",
-    "password": "Qam2608venv",
+    "email": email,
+    "password": password,
     "remember": False
     }
-    r = auth.signin(s, user_data)
+    r = api.auth.signin(s, user_data)
     r_json = after_processsing(r)    
     assert r.status_code == 200, "Wrong status code"
     assert r_json["status"] == "ok", "Key 'status' is not ok"
@@ -22,7 +35,7 @@ def test_sigin_negative():
     "password": "Qam2",
     "remember": False
     }
-    r = auth.signin(s, user_data_negative)
+    r = api.auth.signin(s, user_data_negative)
     r_json = after_processsing(r)
     assert r.status_code == 400, "Wrong status code"
     assert r_json["status"] == "error", "Key 'status' is not error"
@@ -30,7 +43,41 @@ def test_sigin_negative():
 
 def test_logout():
 
-    r = auth.logout(s)
+    r = api.auth.logout(s)
     r_json = after_processsing(r)    
     assert r.status_code == 200, "Wrong status code"
     assert r_json["status"] == "ok", "Key 'status' is not ok"
+
+
+def test_sigin_delete_and_cant_resign():
+    """E2E test example"""
+    # Створення даних користувача для тестування
+    user_data = {
+        "email": "qam0404@2022test.com",
+        "password": "Qam2608venv",
+        "remember": False
+    }
+
+    # Автентифікація користувача
+    r = API.auth.signin(s, user_data)
+    r_json = r.json()
+    
+    # Перевірка успішності автентифікації
+    assert r.status_code == 200, "Wrong status code"
+    assert r_json["status"] == "ok", "Key 'status' is not ok"
+
+    # Видалення користувача
+    r = API.users.users(s)
+    r_json = r.json()
+    
+    # Перевірка успішності видалення користувача
+    assert r.status_code == 200, "Wrong status code"
+    assert r_json["status"] == "ok", "Key 'status' is not ok"
+
+    # Спроба повторного входу після видалення користувача (має бути помилка)
+    r = API.auth.signin(s, user_data)
+    r_json = r.json()
+    
+    # Перевірка невдалої спроби входу після видалення користувача
+    assert r.status_code == 400, "Wrong status code"
+    assert r_json["status"] == "error", "Key 'error' expected"
