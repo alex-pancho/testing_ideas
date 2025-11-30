@@ -1,6 +1,6 @@
 import requests
-base_api_url = "https://qauto.forstudy.space/api"
-
+base_url = "https://guest:welcome2qauto@qauto.forstudy.space"
+base_api_url = f"{base_url}/api"
 
 class Auth():
 
